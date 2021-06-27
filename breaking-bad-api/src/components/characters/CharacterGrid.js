@@ -8,7 +8,7 @@ export const CharacterGrid = ({ characters, isLoading }) => {
     <section className="cards">
       {characters.map((character) => (
         // <h1 key={character.char_id}>{character.name}</h1>
-        <Character name={character.name} key={character.char_id} />
+        <Character character={character} key={character.char_id} />
       ))}
     </section>
   );
