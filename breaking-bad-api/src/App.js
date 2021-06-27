@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/ui/Header';
 import { CharacterGrid } from './components/characters/CharacterGrid';
+import Search from './components/ui/Search';
 import axios from 'axios';
 import './App.scss';
 
@@ -24,6 +25,7 @@ function App() {
   return (
     <>
       <Header />
+      <Search />
       <CharacterGrid isLoading={isLoading} characters={characters} />
     </>
   );
