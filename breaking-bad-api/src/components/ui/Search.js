@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 // when you have input fields each input field will have it's own useState assigned to it
-const Search = () => {
+const Search = ({ getQuery }) => {
   const [name, setName] = useState('');
+
+  const onChange = (query) => {
+    setName(query);
+    getQuery(query);
+  };
 
   return (
     <section>
@@ -11,7 +16,7 @@ const Search = () => {
           className="form-control"
           placeholder="Search characters"
           autoFocus
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => onChange(e.target.value)}
           value={name}
         />
       </form>

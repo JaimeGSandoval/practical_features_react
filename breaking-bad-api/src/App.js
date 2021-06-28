@@ -8,11 +8,12 @@ import './App.scss';
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     const fetchCharacters = async () => {
       const result = await axios.get(
-        `https://www.breakingbadapi.com/api/characters`
+        `https://www.breakingbadapi.com/api/characters?name=${query}`
       );
       console.log(result.data);
       setCharacters(result.data);
@@ -20,12 +21,13 @@ function App() {
     };
 
     fetchCharacters();
-  }, []);
+  }, [query]);
 
   return (
     <>
       <Header />
-      <Search />
+      {/* passing the query up from Search component. setQuery is part of our state. We're setting query by using setQuery. The query is being sent up from the search component. We pass the function as a prop to the Search component where it brings back the query and feeds it to setQuery */}
+      <Search getQuery={(query) => setQuery(query)} />
       <CharacterGrid isLoading={isLoading} characters={characters} />
     </>
   );
