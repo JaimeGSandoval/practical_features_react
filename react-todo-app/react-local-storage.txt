@@ -1,0 +1,4 @@
+***Why do we need this storage?
+Sometimes, we interact with a page and pass in data like form inputs; dark mode theme value; todos items etc. As users, you may need the data to be available on page refresh or your next visit.
+
+Here in this section, you’ll learn to do that. To get started, let’s take a look at the Storage API.
