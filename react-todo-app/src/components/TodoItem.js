@@ -18,6 +18,10 @@ class TodoItem extends React.Component {
     }
   };
 
+  componentWillUnmount() {
+    console.log('Cleaning up...');
+  }
+
   render() {
     const { id, completed, title } = this.props.todo;
 
