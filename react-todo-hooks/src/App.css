@@ -63,3 +63,11 @@ body {
   outline: none;
   border: none;
 }
+
+/* Styling React Icons */
+/* By default, these icons inherit the CSS styles of the parent element. You can go ahead and style them directly in your CSS file as SVGs by targeting its parent element. */
+.input-submit svg {
+  color: darkcyan;
+  font-size: 20px;
+  margin-top: 2px;
+}
