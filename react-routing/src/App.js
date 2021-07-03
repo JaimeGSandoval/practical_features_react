@@ -3,7 +3,7 @@ import Accordion from './components/Accordion';
 import Search from './components/Search';
 import Dropdown from './components/Dropdown';
 import Translate from './components/Translate';
-// import Route from './components/Route';
+import Route from './components/Route';
 
 const items = [
   {
@@ -35,55 +35,64 @@ const options = [
   },
 ];
 
-// This would work but it can be done better as component
+// using this component instead of all of the other separate functions below for each route is a better solution but it's not very react like. A separate component handling it would be better.
 // const showComponent = (route, component) => {
-//   return window.location === route ? component : null;
+//   return window.location.pathname === route ? component : null;
 // };
 
-const showAccordion = () => {
-  if (window.location.pathname === '/') {
-    return <Accordion items={items} />;
-  }
-};
+// const showAccordion = () => {
+//   if (window.location.pathname === '/') {
+//     return <Accordion items={items} />;
+//   }
+// };
 
-const showList = () => {
-  if (window.location.pathname === '/list') {
-    return <Search />;
-  }
-};
+// const showList = () => {
+//   if (window.location.pathname === '/list') {
+//     return <Search />;
+//   }
+// };
 
-const showDropdown = () => {
-  if (window.location.pathname === '/dropdown') {
-    return <Dropdown />;
-  }
-};
+// const showDropdown = () => {
+//   if (window.location.pathname === '/dropdown') {
+//     return <Dropdown />;
+//   }
+// };
 
-const showTranslate = () => {
-  if (window.location.pathname === '/translate') {
-    return <Translate />;
-  }
-};
+// const showTranslate = () => {
+//   if (window.location.pathname === '/translate') {
+//     return <Translate />;
+//   }
+// };
 
 const App = () => {
+  const [selected, setSelected] = useState(options[0]);
+
   return (
     <div>
-      {showAccordion()}
-      {showList()}
-      {showDropdown()}
-      {showTranslate()}
-
-      {/* <Route path="/">
+      <Route path={'/'}>
         <Accordion items={items} />
       </Route>
-      <Route path="/list">
+
+      <Route path={'/list'}>
         <Search />
       </Route>
-      <Route path="/dropdown">
-        <Dropdown />
+
+      <Route path={'/dropdown'}>
+        <Dropdown
+          label="Select a color"
+          selected={selected}
+          onSelectedChange={setSelected}
+          options={options}
+        />
       </Route>
-      <Route path="/translate">
+
+      <Route path={'/translate'}>
         <Translate />
-      </Route> */}
+      </Route>
+      {/* {showAccordion()}
+      {showList()}
+      {showDropdown()}
+      {showTranslate()} */}
     </div>
   );
 };
