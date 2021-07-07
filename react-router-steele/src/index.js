@@ -1,10 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import './App.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* wrapping the App component in BrowserRouter is what gives our project routing capabilities from react router */}
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

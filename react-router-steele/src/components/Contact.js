@@ -1,9 +1,10 @@
 import React from 'react';
 
-const Contact = () => {
+const Contact = ({ type }) => {
+  console.log(type);
   return (
     <div>
-      <h1>Contact</h1>
+      <h1>Contact: {type}</h1>
     </div>
   );
 };
