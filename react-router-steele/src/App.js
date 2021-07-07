@@ -22,42 +22,73 @@ function App() {
         </Link> */}
 
         {/* proper way to create nav links */}
-        <NavLink to="/" exact activeClassName="active-link">
+        <NavLink
+          to="/"
+          exact
+          activeClassName="active-link"
+          style={{ padding: '0 15px' }}
+        >
           Home
         </NavLink>
-        <NavLink to="/about" exact activeClassName="active-link">
+        <NavLink
+          to="/about"
+          exact
+          activeClassName="active-link"
+          style={{ padding: '0 15px' }}
+        >
           About
         </NavLink>
-        <NavLink to="/contact" exact activeClassName="active-link">
+        <NavLink
+          to="/contact"
+          exact
+          activeClassName="active-link"
+          style={{ padding: '0 15px' }}
+        >
           Contact phone
         </NavLink>
-        <NavLink to="/contact/email" exact activeClassName="active-link">
+        <NavLink
+          to="/contact/email"
+          exact
+          activeClassName="active-link"
+          style={{ padding: '0 15px' }}
+        >
           Contact email
         </NavLink>
-        <NavLink to="/contact/twitter" exact activeClassName="active-link">
+        <NavLink
+          to="/contact/twitter"
+          exact
+          activeClassName="active-link"
+          style={{ padding: '0 15px' }}
+        >
           Contact twitter
         </NavLink>
       </nav>
+
+      {/* passing an arrow function  to return a component is  another way to render the correct component to a matching path, but the arrow function causes more re-renders than is necessary. That's why it's better to use the render property instead. */}
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/about" component={About} />
+        <Route
+          exact
+          path="/about"
+          component={(props) => <About {...props} />}
+        />
         <Route
           exact
           path="/contact"
           // component={Contact}
-          render={() => <Contact type="555-5555" />}
+          render={(props) => <Contact type="555-5555" {...props} />}
         />
         <Route
           exact
           path="/contact/email"
           // component={Contact}
-          render={() => <Contact type="yomama@mail" />}
+          render={(props) => <Contact type="yomama@mail" {...props} />}
         />
         <Route
           exact
           path="/contact/twitter"
           // component={Contact}
-          render={() => <Contact type="@bankaiYielder" />}
+          render={(props) => <Contact type="@bankaiYielder" {...props} />}
         />
       </Switch>
     </>
