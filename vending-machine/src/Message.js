@@ -1,9 +1,8 @@
-import React, { Component } from "react";
-import "./Message.css";
+import React from 'react';
+import './Message.css';
 
-class Message extends Component {
-  render() {
-    return <div className='Message'>{this.props.children}</div>;
-  }
-}
+const Message = ({ children }) => {
+  return <div className="Message">{children}</div>;
+};
+
 export default Message;
