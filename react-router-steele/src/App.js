@@ -4,6 +4,7 @@ import { Switch, Route, Link, NavLink } from 'react-router-dom';
 import Home from './components/Home';
 import Contact from './components/Contact';
 import About from './components/About';
+import './App.css';
 
 // *** General rule to always apply always include the "exact" keyword when assigning routes
 
@@ -22,12 +23,7 @@ function App() {
         </Link> */}
 
         {/* proper way to create nav links */}
-        <NavLink
-          to="/"
-          exact
-          activeClassName="active-link"
-          style={{ padding: '0 15px' }}
-        >
+        <NavLink to="/" exact activeClassName="active-link" className="padding">
           Home
         </NavLink>
         <NavLink
