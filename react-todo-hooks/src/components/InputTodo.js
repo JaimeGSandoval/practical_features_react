@@ -3,24 +3,29 @@ import { FaPlusCircle } from 'react-icons/fa';
 // import { IconContext } from 'react-icons';
 
 const InputTodo = (props) => {
-  const [inputText, setInputText] = useState({
-    title: '',
-  });
+  // const [inputText, setInputText] = useState({
+  //   title: '',
+  // });
+  const [inputText, setInputText] = useState('');
 
   const onChange = (e) => {
-    setInputText({
-      ...inputText,
-      [e.target.name]: e.target.value,
-    });
+    // setInputText({
+    //   ...inputText,
+    //   [e.target.name]: e.target.value,
+    // });
+    setInputText(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (inputText.title.trim()) {
-      props.addTodoProps(inputText.title);
-      setInputText({
-        title: '',
-      });
+    // if (inputText.title.trim()) {
+    if (inputText.trim()) {
+      // props.addTodoProps(inputText.title);
+      props.addTodoProps(inputText);
+      // setInputText({
+      //   title: '',
+      // });
+      setInputText('');
     } else {
       alert('Please write item');
     }
@@ -32,7 +37,8 @@ const InputTodo = (props) => {
         type="text"
         className="input-text"
         placeholder="Add todo..."
-        value={inputText.title}
+        // value={inputText.title}
+        value={inputText}
         name="title"
         onChange={onChange}
       />
