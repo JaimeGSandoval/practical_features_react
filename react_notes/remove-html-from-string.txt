@@ -1,0 +1,16 @@
+
+If you are not comfortable with dangerouslySetInnerHTML, you can use something like below (assuming you're following Stephen's naming conventions). Replace renderedResults with this:
+
+  const renderedResults = results.map((result) => {
+    const regex = /(<([^>]+)>)/gi;  //NEW
+    const cleanSnippet = result.snippet.replace(regex, ""); //NEW
+
+    return ( // {result.snippet} was replaced with {cleanSnippet}
+      <div key={result.pageid} className="item">
+        <div className="content">
+          <div className="header">{result.title}</div>
+          {cleanSnippet}
+        </div>
+      </div>
+    );
+  });

@@ -1,0 +1,42 @@
+***The Provider: The BrowserRouter component (can also have an alias of Router)
+  - it allows anywhere that any component in your application that is a child of the browserRouter/Router provider will be able to use the rest of the router component.
+  - when you have a provider you want to put it at the top level of the application, which would be in index.js.
+  - everything that's nested inside the BrowserRouter/Router component will be able to control things like the url of the application and it will be able to access specific functions that'll allow you to change the view.
+
+
+***The Switch statement/component: The switch statement is the main way that you determine what the user will see depending on what url they are on.
+- The switch statement ensures that only one component is rendered at a time.
+- The switch is just like one big if statement. If the path is matched, the component that's assigned to that path renders.
+
+
+- Instead of having the component that you want rendered as a child to the route that has the matching path like so:
+
+<Route path="/about">
+  <About/>
+</Route>
+
+...you can have it nested within the Route component in the render attribute like so:
+
+<Route path="/about" render={(props) => <About {...props}/>}/>
+
+...when you out it inside the render attribute you can pass in the props that comes from react router, which contains all the props that inherently come into the component from react router. It has the history prop, location prop and the match prop.
+
+The History prop is what stores the previous places/urls you've been to
+The Location prop will store the current path that you're at
+The match prop can hold data, like parameters
+
+
+***useHistory hook: you can use it anywhere that has v=been nested into the BrowserRouter/Router provider.
+- it allows you to use the history object without having it need to be passed in as a prop.
+- you would simply use history.push('/contact') passing in the url that you want to go to and the view will change to that:
+
+  const history = useHistory();
+
+  return (
+    <button onClick={() => history.push('/contact')}>Contact Us</button>
+    <button onClick={() => history.push('/about')}>About Us</button>
+    <button onClick={() => history.push('/')}>Home</button>
+  )
+
+
+***Link: the link component uses the history object under the hood and pushes the url into it.

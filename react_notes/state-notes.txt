@@ -1,0 +1,20 @@
+- State is a javascript object the that contains data that strictly belongs to a component.
+- Updating state on a component causes the component to almost instantly re-render.
+- if a component has state, the state must initialized when the component is created.
+- In general, you would initialize your React state as high up the component tree as possible so that your state props could be passed down to all the appropriate child components.
+
+The single source of truth principle still applies even if child components have their own local state since they could pass that state props down into their own child components and those components would re-render when those props were updated.
+
+- Let’s go through each one and figure out which one is state. Ask three questions about each piece of data:
+
+Is it passed in from a parent via props? If so, it probably isn’t state.
+
+Does it remain unchanged over time? If so, it probably isn’t state.
+
+Can you compute it based on any other state or props in your component? If so, it isn’t state.
+
+If you are wrong about your assertions, no big deal. You can just add in that state later when it becomes apparent. You don't necessarily need to commit to anything from the onset. You can adjust these things as you learn and develop the app.
+
+- A child component may not be the parent to the whole application, however, it may still have its own local state and be the parent to other child components that it shares its state with as props.
+
+- You’ll mostly find yourself declaring a state anytime you want some data to be updated whenever user perform some action like updating input field, toggling menu button etc. Also, if two or more child components need to communicate with each other.

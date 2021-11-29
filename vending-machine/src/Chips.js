@@ -13,15 +13,28 @@ const Chips = () => {
     setBags(() => [...bags, { x, y }]);
   };
 
-  const bagsRendered = bags.map((bag, i) => (
-    <img
-      key={i}
-      src={chipsImg}
-      className="bag"
-      style={{ top: `${bag.y}px`, left: `${bag.x}px` }}
-      alt="bag of lay's chips"
-    />
-  ));
+  // const bagsRendered = bags.map((bag, i) => (
+  //   <img
+  //     key={i}
+  //     src={chipsImg}
+  //     className="bag"
+  //     style={{ top: `${bag.y}px`, left: `${bag.x}px` }}
+  //     alt="bag of lay's chips"
+  //   />
+  // ));
+
+  const bagsRendered = bags.map((bag, i) => {
+    console.log(bag);
+    return (
+      <img
+        key={i}
+        src={chipsImg}
+        className="bag"
+        style={{ top: `${bag.y}px`, left: `${bag.x}px` }}
+        alt="bag of lay's chips"
+      />
+    );
+  });
 
   return (
     <div className="Chips">

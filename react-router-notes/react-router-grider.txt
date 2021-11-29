@@ -1,0 +1,39 @@
+- when installing react router be sure you always install "react-router-dom" and not "react-router"
+
+- BrowserRouter, Route, Link
+
+****What part of the url does react router care about?
+- react router doesn't care about the entire url. React router only cares about all the characters that are listed after domain definition or port definition. Ex:
+
+   twitter.com/tweets/user
+
+React router only cares about '/tweets/users' and not twitter.com.
+
+****Browser router component
+- the BrowserRouter internally creates an object called the history object. This history object is going to look at the url inside of the address bar and it's going to extract just that portion of the url that react router router cares about, just after everything after the domain name or port. The history object is then going to communicate that path over to BrowserRouter and then BrowserRouter is gping to communicate that path down to the Route components. The Route components are then going to decide to show themselves or hide themselves depending upon the path inside of the url that the user is visiting and the path property that it was passed when it was created.
+
+***"exact" keyword
+- the exact keyword on a Route component is used to match the path exactly and will stop rendering of unwanted components
+   <BrowserRouter>
+      <div>
+          <Route path="/" exact component={HomePage}>
+          <Route path="/about" component={AboutPage}>
+          </div>
+   </BrowserRouter>
+
+The "exact" keyword will only apply to the route you add it to.
+
+
+****Link
+- Link is a react component that gets used in place of any anchor tags that you ever want to show in our application.
+- When you use the Link component you don't make use of the "href" property. Instead it's called "to". The Link component becomes an anchor tag when the component renders and the "to" property becomes the "href" property.
+- So whenever you want the user to navigate around the application we're going to add a Link component which will have the route the user is going to navigate to when they click on it as the "to" prop.
+- Whenever a user clicks on the anchor tag that gets rendered from the Link component react router will automatically prevent the browser from navigating over to that new route in the traditional form and it'll keep the browser from trying to navigate to the route and re-fetching an html document.
+- The url still changes. The history object is going to see the updated url. It'll take that url and it's going to send it to the BrowserRouter. The BrowserRouter is then going to communicate that url down to all the different route components and the route components are then going to re-render to show a new set of components depending upon the path the user is now visiting.
+- So when you make use of the Link component we're still making use of an anchor tag on the screen, however react router is going to detect a click on an anchor tag and override the default behavior and keep ypur browser form navigating away. So when you make use of the Link component we're not dumping all of our react and javascript data. We're just showing a different set of components on screen.
+
+
+****Always visible components
+- If you want a component to always be visible no matter what url the user is trying to look at you can place the component outside of the browser router. If we have a component that's not listed inside the BrowserRouter it will always be shown 100% of the time no matter twhat the path is.
+
+- So anytime you want to make sure that a component is always visible inside our application you can just place it out side of the BrowserRouter component. The one exception to that rule is when the outside component will contain any react router related elements, such as a Link component. If you try to show a Link on a page or any element that is outside of our browser router you'll get an error. Any component that's not a child of a router cannot contain any react router related components.

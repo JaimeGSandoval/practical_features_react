@@ -1,0 +1,8 @@
+The only thing that can be returned from the useEffect hook is another function. The goal of the function is to do some clean up. When we return this function react will keep a reference to it. It'll call that function automatically at some future point in time.
+
+Whenever our component first renders the overall arrow function in useEffect is invoked and we return the clean up function. Then, anytime it is time to run the arrow function that's in useEffect again, first react calls the clean up function that it got from the last time useEffect ran, then it's going to call the overall arrow function in useEffect again.
+
+
+- So we start off with the initial component render the arrow function that was provided to useEffect gets called. That's the first thing that happens.
+- We then return a clean up function. React will hold a reference to that clean up function.
+- The next time we re-render our component the clean up function that react has a reference to gets invoked first automatically. After that the function provided to useEffect gets called again. When it gets called we once again return a clean up function, and the entire process repeats every single time that we re-render the component.

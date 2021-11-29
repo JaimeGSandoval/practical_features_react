@@ -1,0 +1,16 @@
+- useReducer allows you manage state and re-render a component whenever the component's state changes.
+- useReducer gives a more concrete way to handle complex state. It gives you set actions that you can perform on your stae and it's going to convert your current state to a new version of the state based on the action that you send it.
+- generally, when you work wit useReducer you'll be using objects instead of actual values i.e. useState(0), but with useReducer: useReducer(reducer, {count: 0}). This is because useReducer is reserved for more complex state instead of just a single value.
+- const [state, dispatch] = userReducer(reducer, {count: 0}) -> dispatch function is what we call in order to update our state. It's going to call the reducer with certain parameters.
+- The reducer will take two parameters: the current state and it takes an action. This action is what we pass into the dispatch function. Whenever we call dispatch what's going to happen is whatever we call dispatch with is going to set to the action parameter in the reducer function; our current state is going to be in the state parameter, and the reducer function is going to return our new updated state.
+
+const reducer = (state, action) => {
+  // do something with state
+}
+
+const [state, dispatch] = userReducer(reducer, {count: 0})
+
+- you'll pass a 'type' to the dispatch function: dispatch({type: 'increment'}). Inside the reducer you'll have a switch statement that will change state in different ways based on the type passed to dispatch. The types are the actions you can do on the state.
+
+Payload:
+- something you'll commonly do with reducers is you pass in the type, which is going to be the action that you want to do. An then you going to pass in what's called a payload. Naming it payload is a common convention. The payload is an object which is essentially contains all of the variable values we need to actually perform that action

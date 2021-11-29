@@ -1,0 +1,154 @@
+In our code, we are assigning a string to the title state variable through the useState. This is the simplest use case of the Hook. This setup allows us to manage an input field in a function call. If you add more fields, you’ll need to define a separate useState Hook and a function to manage it.
+
+This is fine.
+
+But, in some cases, you’d be working with objects as state values. For instance, you may be working with related data as in the case of form fields and you’d want a single handler to keep track of all the fields.
+
+Unlike the class-based approach. Anytime you have an object as the state value, React will not merge the state returned by the useState Hook with that of the update passed to it.
+
+Meaning it doesn’t merge the old and new state. Instead, it overrides the entire state with that of the current.
+
+In the use case above we defined the state like this:
+
+const [inputText, setInputText] = useState({
+  fName: "",
+  lastName: "",
+})
+
+Now, if we call the updater function, setInputText and triggered the onChange function below:
+
+const onChange = e => {
+  setInputText({
+    [e.target.name]: e.target.value,
+  })
+}
+
+
+The old state is replaced by the one that triggers the event.
+
+To correct that, you’ll need to copy the entire properties from the old state using the spread operator (…) and override the part of it.
+
+const onChange = e => {
+  setInputText({
+    ...inputText,
+    [e.target.name]: e.target.value,
+  })
+}
+
+You can also go further by ensuring that you have the latest state when setting new values. This is especially needed if the new values depend on the old state. For instance, if you are working on input checkbox.
+
+This way, you can pass a callback to the updater and use it as the first argument like so:
+
+const onChange = e => {
+  setInputText(prevState => {
+    return {
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }
+  })
+}
+
+With this approach, you can manage as many input fields in your app with a single function (In this case, the onChange). All you have to do is to make sure that the name prop in these fields matches what you specified in the state.
+
+But if you don’t feel comfortable grouping related data like this, you can split them into different useState. But don’t forget, you'd need separate functions to manage them.
+
+
+**********useEffect
+What is happening in the code?
+As expected, we started by importing the useState Hook so that we can manage the state. Then, we removed all the occurrence of this.state as used in the class version. It doesn’t apply in the function component.
+
+Likewise, the setTodos used (in every function at the top level of the component) to update the state value replaces their respective this.setState.
+
+Also, take a look at how we are accessing the previous state from the setTodos in the handleChange function. Just like the case of the setState() method in the class component, we have access to the previous state from the function passed to the setTodos. Remember, this is useful if the new state is computed using the previous state.
+
+This Hook takes in a function as an argument and an optional array (I omitted that for now). The function defines the side effect to run (in our case, storing and reading todos items to and from the local storage) and the optional array will define when to re-run the effect.
+
+By default, this effect run after every completed render. That is, on the first render and after every state or prop changes. You can test that by trying to interact with the todos app while the console is open. You will see the log message displaying on every completed render.
+
+This is happening because the Hook combines different lifecycle logic.
+
+Depending on what you want, you can control it. That’s where the optional array of dependencies comes in.
+
+useEffect(() => {
+  ...
+}, []);
+
+This array let you specify some dependencies.
+
+You can also leave it empty BUT ONLY if your effect doesn’t use any value from the rendered scope. In other words, the effect does not use values from inside your component.
+
+Should in case you are using any of the component value (like props, state or even functions) in the effect, you must add them as dependencies in the array.
+
+This way, if and only if any of the value(s) changes between re-renders, React will re-run the effect. Else it skips applying the effect.
+
+That is how to look at the effect Hook.
+
+Yes, React skips any form of re-rendering and only execute the effect ONCE if you do not specify any dependency in the array, making it empty. This is synonymous to the componentDidMount in the class component.
+
+But don’t look at it from that angle. You might be tempted to leave the array empty while you have component values being used by the effects. This way, the impression you are given React is that your effect doesn’t depend on any value from inside the component. Whereas, it does.
+
+Leave React to decide when to do the re-run. Your job is to pass every necessary hint i.e dependencies through the array if you need to control the effect.
+
+At the moment, we don’t have data in the local storage to display, as we haven’t added the logic. Let’s do that now. In the class version of the code, this logic resides in the componentDidUpdate method.
+
+We know that componentDidUpdate execute when there is state or prop change.
+
+If you recall, we checked for the update by comparing the prevState of the todos object to the current snapshot. But this requirement is built into the useEffect Hook.
+
+From the explanation above, we can specify the state variable, todos as the dependency. This tells React to only re-run (of course after the first render) when the state change. React start monitoring the variable for any changes and then re-run the effect.
+
+That’s is how effect performs the update logic in a function component.
+
+useEffect(() => {
+  // storing todos items
+  const temp = JSON.stringify(todos)
+  localStorage.setItem("todos", temp)
+}, [todos])
+
+
+
+**********Assigning the saved Todos directly to the Initial State
+In the code above, we are calling the setTodos setter function in the effect. This is similar to calling the setState() in the componentDidMount method. As we’ve mentioned earlier in the series, this triggers an extra rendering. React already said it’s fine because it will happen before the browser updates the view.
+
+Nonetheless, we will provide a simple yet optimized alternative to getting the value and assigning to the state on component mount.
+
+Back to the TodoContainer.js file. Delete or comment-out the mounting logic (i.e the effect with the empty array) and add this function instead.
+
+function getInitialTodos() {
+  // getting stored items
+  const temp = localStorage.getItem("todos")
+  const savedTodos = JSON.parse(temp)
+  return savedTodos || []
+}
+
+ We are accessing the local storage and getting the saved todos or simply returning a fall back empty array.
+
+ Then we can assign this function to the state variable like so:
+
+const [todos, setTodos] = useState(getInitialTodos())
+
+
+**********Performing the componentWillUnmount logic in the function component
+This is going to be an easy walk. You should know how the method works if you follow the series from the beginning. Normally, we do cleanup like cancelling the network request, invalidating the timers, removing event listeners amongst others to prevent a memory leak.
+
+So when the component is about to be destroyed React calls the method so it could perform the cleanup.
+
+useEffect Hook works a bit different.
+
+This Hook, as we already know run on every render by default. It also performs a cleanup effect from the previous render before another cycle and of course before the component is unmounted. This helps prevent bugs in your component.
+
+
+useEffect(() => {
+  return () => {
+    console.log("Cleaning up...")
+  }
+}, [])
+
+What is happening?
+Anytime you return a function inside the useEffect Hook, and then have no dependency in the array, the effect will run just once and the return function will be called when the component is about to unmount.
+
+However, if we do not specify an array, the effect goes back to default. That is, it executes on every re-render and performs the cleanup before it runs the next time and of course before the component unmount.
+
+In this case, in our app, you’ll be seeing the log message on every interaction with the todos items. Whether you toggle the checkbox, edit an item, delete or input new items, you’ll see the log message in the console.
+
+We didn’t want that. So, we had to add an array of dependencies. But this time, no component value was specified in the effect. Hence the array is empty.

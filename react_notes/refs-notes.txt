@@ -1,0 +1,13 @@
+When you want to access DOM elements in javascript you'd do something like this:
+
+document.querySelector('img').clientHeight
+
+But you can't do that in React.
+
+When you want to access DOM elements directly in React you do not make use of any of the normal dom accessing methods (querySelector, getElementById) etc.
+
+Instead you make use of the react system called "refs":
+
+  - refs gives access to a single DOM element
+  - you create refs in the constructor of a class or use the useRef hook and assign it to instance vars, then pass that to a particular JSX element as props.
+  - the ref itself is a javascript object that has a "current" property. The current property references a DOM node. In the example above it would reference the img element

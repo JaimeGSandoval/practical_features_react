@@ -1,0 +1,44 @@
+- if you ever want multiple pieces of state in a component you have to call useState multiple times
+
+- Calling the setter:
+  - As soon as you call any setter function coming from a useState hook the entire component will re-render, so starting from the very top of the component, everything inside it gets executed once again. The thing to keep in mind with the default value in useState is that when you re-render our component the default value to the useState function is going to fall away. It won't be used anymore. It's only an initialization value. It won't be used anymore. As soon as we call our setter even one time we will not be using that default value anymore. The value of the state variable will now be equal to whatever we provide to our setter function. The function component then gets executed again with that value.
+
+
+*****Explanation of component re-render and adding & removing a class named "active"
+- Because when you click on another item, it causes the state to change (the activeIndex is set to whatever index you clicked on). This in turn causes the component to re-render.
+
+So it never really "removes" the class. It simply recreates the component (in reality, it keeps whatever is the same and only changes what needs to be changed, for efficiency) and now the activeIndex is NOT equal to the index of the previously open item, so the "active" class will be set to null on that item, and the item whose index IS equal to activeIndex will have its "active" class set to the word "active", and everything should thus work correctly.
+
+
+******Description of how an api call gets made and state changes to show the retrieved data:
+   - The search component will have 2 pieces of state: "term" and "results". The term will have whatever the user types into the text input. We'll then send that off to the wikipedia api for a search. That'll give us back some results and we're going to store those results on some piece of state as well. As soon we change that piece of state called results the whole component will re-render and show the api data.
+
+*** Getting access to the previous state and building off of it:
+ - // When building on top of the previous value of state/count you need to use the second form of the setCount method. Instead of passing the value of the new state variable, we pass in a function that has access to the previous state value.
+
+// Any time you need to update state value based on the previous state value always go with the safer option of passing a function that will set the new state value. The argument for this function will be the previous state which it has access to automatically.
+
+// Wrong way to build off of previous state/count value. Won't increment because the value is stale.
+// setCount(count + 1);
+
+// Right way to build off of previous state/value. Use the second form of the set method that's offered by useState, which is passing in a function that has access to the previous state/value
+setCount((previousCount) => previousCount + 1);
+
+<div>
+  <div>{count}</div>
+  {/* This is the wrong way to access the previous value of state/count and build on that value */}
+  {/* <button onClick={() => setCount(initialCount)}>Reset Count</button>
+  <button onClick={() => setCount(count + 1)}>Increment Count</button>
+  <button onClick={() => setCount(count - 1)}>Decrement Count</button>
+  <button onClick={incrementFive}>Increment 5</button> */}
+
+   *** correct way to access previous value of state/count and building off that
+  <button onClick={() => setCount(initialCount)}>Reset Count</button>
+  <button onClick={() => setCount((previousCount) => previousCount + 1)}>
+    Increment Count
+  </button>
+  <button onClick={() => setCount((previousCount) => previousCount + 1)}>
+    Decrement Count
+  </button>
+  <button onClick={incrementFive}>Increment 5</button>
+</div>

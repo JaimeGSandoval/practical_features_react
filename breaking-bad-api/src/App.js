@@ -12,6 +12,7 @@ function App() {
 
   useEffect(() => {
     const fetchCharacters = async () => {
+      console.log('fetching');
       const result = await axios.get(
         `https://www.breakingbadapi.com/api/characters?name=${query}`
       );

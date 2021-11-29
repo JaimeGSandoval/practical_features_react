@@ -1,0 +1,22 @@
+window.location is an object that's built into your browser. This object is automatically updated when you navigate to a different url. The object has a lot of info extracted from the current url.
+
+Inside the object there's a property named 'pathname'. The pathname is everything inside the url after the domain.
+
+  https://localhost:3000/translate
+
+Here the pathname is '/translate'. If we were at the home or root of the url, the pathname would be '/'
+
+Route mappings:
+
+window.location.pathname === '/' -> show Accordion component
+window.location.pathname === '/list' -> show Search component
+window.location.pathname === '/dropdown' -> show Dropdown component
+window.location.pathname === '/translate' -> show Translate component
+
+You define a series of different functions. In each of these functions you do one of these different comparisons. If this comparison is true, we will return the appropriate component.
+
+
+*****Creating routing without refreshing the entire page and making repeated network requests
+Inside the header component we make new kind of component called "Link" which will just display a link on the screen. It'll show a normal anchor element, but we're gong to attach an onClick handler to the anchor element that's going to execute some very special logic whenever the user clicks on it.
+
+When a user clicks on a link we build a navigation event object. It'll be an object that'll communicate to the rest of our app that the url has just changed. This navigation event will then be sent off to all the different route components inside of our app. When they receive this navigation event they're going to know the url has just changed. They'll then take a look at the updated url and decide whether or not they should show their respective child components.

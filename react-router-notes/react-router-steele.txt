@@ -1,0 +1,125 @@
+*** What client side routing does
+- client side routing handles mapping between the url bar and the content a user sees via browser rather than via server.
+- sites that exclusively use client side routing are called single page applications.
+- we use javascript to manipulate the url bar with a web API called "history"
+- allow you to bookmark pages
+
+*** General rule to always apply:
+- always include the "exact" keyword when assigning routes unless you know that you don't need exact
+- always wrap the routes with a switch component unless your okay with more than one route matching
+- this helps because you do not have to stress about the order for the components and rendering the wrong paths
+
+***Switch
+- the switch component limits us to one route that matches the path. It's really helpful with nested or complicated routing.
+- if all of the routes contain an exact keyword you do not have to wrap the routes in a switch component
+
+***exact
+- when you put the "exact" keyword in a route it means that it has to be an exact match. The path has to match exactly to the string passed to the path attribute.
+
+
+***Link
+- the Link component acts like a replacement for anchor tags
+- instead of an href attribute we replace it w/ / a prop called "to"
+- clicking on the link does not issue a get request. JavaScript intercepts the click and does the client side routing
+
+
+***NavLink
+- NavLink component is just like the Link component but with one additional feature
+- you can style the anchor tags selectively based of of which ones are active
+- this lets you style the links on the page you're already at using the "activeStyle" (for inline) or the
+"activeClassNameProps"
+
+
+***render vs component properties
+- both return JSX to be rendered to the DOM
+- component property w/ arrow function:
+
+      component={() => <Dog name="Vader"}
+
+- when passing an arrow function to the component property the component re-renders more than is necessary. It's not reusing the the component, it's making a new one every time there's a re-render. This can cause performance issues.
+
+- render property w/ arrow function:
+
+    render={() => <Dog name="Luke"}
+
+- when the render property is used the component only gets created and mounted once, then re-renders if it needs to. A brand new component isn't being created every time and mounted, just updating.
+
+- General rule of thumb: if you're not passing props to the component to be rendered, just use the component property:
+
+   component={Dog}
+
+but if you are passing other props besides the routeProps to the component that's to be rendered, use render with the arrow function:
+
+   render={(props) => <Dog name="Naruto" authentication={true}/>}
+
+
+***Route Props
+All route render methods (component, render, children) automatically get a props-object/route-information with a history, match, and location property passed to it.
+  - match contains information about the path and the route that actually was matched.
+
+****Correct way to use url params
+- '/food/:type' -> this is how you make a url parameter, by using a colon followed by the name of the parameter. The ':name' is like a variable. Whatever comes after the colon is the url parameter that we're passing to the component. The route will match what comes after the colon.
+
+- This will pass all the info needed for the food component, which are the 3 route props history, location, and match. They'll show up as 3 separate props:
+
+   <Route path="/food/:name" exact render={(routeProps) => <Food {...routeProps}}/>
+
+The match prop contains a property called params which is an object. This is where the name property will be found and accessed.
+
+- if you do this way:
+
+    <Route path="/food/:name" exact component={Food}/>
+
+   the route props get passed automatically and can be accessed too. The only time you can't use this short cut is of you'd like to add in additional props. It won't allow it.
+
+- So if you're passing in other props you need to use the render method tp pass the routeParams yourself:
+
+    <Route path="/food/:name" exact render={(routeProps) => <Food {...routeProps} authenticated={true}}/>
+
+..otherwise you can you the short cut component syntax:
+
+    <Route path="/food/:name" exact component={Food}/>
+
+****Error route
+- when including an error route, it must be the last route and all the routes must be wrapped in a switch statement
+
+****if you just want to send the user to another part of the app, just use a link component for them to click on
+
+***when using a search from the input of the user, gather the input as you normally would from state and a controlled form input and send that to the right component, just as it was done on the FoodSearch component, which sends the data to the Food component to make a fetch and render the results.
+
+
+***Client side redirecting
+- with react router you can mimic the behavior of server side redirects
+- usually with two scenarios:
+     1. useful after certain actions (e.g. submitting a form, save a profile, .etc), we redirect them somewhere else after they're done.
+     2. when something goes wrong (e.g. 404 page, submit bad data, .etc)
+
+- how to redirect: there's two options:
+    1. use the <Redirect/> component. It'll redirect to wherever you specify.
+        - you use this when something goes wrong and we want to move a user quickly to somewhere else in the app
+    2. calling the .push method on the history prop. When you push something onto the history object it'll redirect the user
+
+***the history object is essentially a linked list and when you push on to it react router takes care of redirecting us to the next route, whatever is next in the history.
+- in order to use history you have to make sure you have history as a prop
+
+***Difference between using redirect and history.push():
+- there's a difference between how the back & forward buttons will work in the browser when clicked.
+
+***General rules of thumb:
+- use <Redirect/> when something negative happens and you need to redirect the user
+- use history.push() when you want to redirect the user as a result of a success (form submit, login, updated, saved, user did some action, etc)
+
+
+***withRouter()
+- when a component is not nested inside a switch statement or route but you want to give it access to routes by using react router you use the withRouter() method and passing the component you'd like to give a route to:
+
+    export default withRouter(NavBar)
+
+withRouter is like a wrapper that says the component passed into it should know about react router, it should know about routes, it should know about history, etc.
+
+
+***Creating a back button with the goBack()method on the history object:
+- the history object has methods that have to do with moving forwards and backwards in history that you can call from within a react component: goBack() & goForward().
+
+   - props.history.goBack()
+   - props.history.goForward()

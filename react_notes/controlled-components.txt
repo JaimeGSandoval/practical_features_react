@@ -1,0 +1,79 @@
+With react you should not store information inside of our html elements. instead you want to centralize all the info we have inside of the react component. You want to make sure that the react side of the application is what's driving the all the data that's flowing through our app and we're not going to somehow store data inside the dom.
+
+The key idea is that we are storing all the information inside of our component's state as opposed to storing it inside the dom.
+
+When the user types in the input the input knows what the text is. The input contains that text. We then call onChange and inform our component what the new text is, then when we re-render the component we set the value attribute on the input with the value that's already in there. Remember the input knows what's being typed in there but we're over riding that and sticking the value from state in, which is the exact same text that was already in there. The entire idea is just to make sure that it's the react application's state driving and storing all the data and not the html dom.
+
+In our code, we are assigning a string to the title state variable through the useState. This is the simplest use case of the Hook. This setup allows us to manage an input field in a function call. If you add more fields, you’ll need to define a separate useState Hook and a function to manage it.
+
+This is fine.
+
+But, in some cases, you’d be working with objects as state values. For instance, you may be working with related data as in the case of form fields and you’d want a single handler to keep track of all the fields.
+
+Unlike the class-based approach. Anytime you have an object as the state value, React will not merge the state returned by the useState Hook with that of the update passed to it.
+
+Meaning it doesn’t merge the old and new state. Instead, it overrides the entire state with that of the current.
+
+In the use case above we defined the state like this:
+
+const [inputText, setInputText] = useState({
+  fName: "",
+  lastName: "",
+})
+
+Now, if we call the updater function, setInputText and triggered the onChange function below:
+
+const onChange = e => {
+  setInputText({
+    [e.target.name]: e.target.value,
+  })
+}
+
+
+The old state is replaced by the one that triggers the event.
+
+To correct that, you’ll need to copy the entire properties from the old state using the spread operator (…) and override the part of it.
+
+const onChange = e => {
+  setInputText({
+    ...inputText,
+    [e.target.name]: e.target.value,
+  })
+}
+
+You can also go further by ensuring that you have the latest state when setting new values. This is especially needed if the new values depend on the old state. For instance, if you are working on input checkbox.
+
+This way, you can pass a callback to the updater and use it as the first argument like so:
+
+const onChange = e => {
+  setInputText(prevState => {
+    return {
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }
+  })
+}
+
+With this approach, you can manage as many input fields in your app with a single function (In this case, the onChange). All you have to do is to make sure that the name prop in these fields matches what you specified in the state.
+
+But if you don’t feel comfortable grouping related data like this, you can split them into different useState. But don’t forget, you'd need separate functions to manage them.
+
+
+*** HANDLING REACT FORM THAT HAS MORE THAN ONE TEXT INPUT FIELD
+For instance, if your form requires fields for the name, email and password. First, you would want all those fields included in the state and assigned to them an empty string. After that, you’d have to modify the onChange method to this:
+
+onChange = e => {
+  this.setState({
+    [e.target.name]: e.target.value
+  });
+};
+
+Then, you add a name attribute to each of the input tags and assign a value with the same name you declared in the state. For instance, in our case, we will have the name="title" included in the text input tag.
+
+With these changes, you can add as many text input fields as you want. Now, instead of having multiple methods to handle different input fields, we modified the setState() method to this:
+
+this.setState({
+  [e.target.name]: e.target.value,
+})
+
+As long as the value of the name attribute in the input tag matches what you have in the state. It will work perfectly.

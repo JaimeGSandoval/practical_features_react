@@ -1,0 +1,96 @@
+They are the primary way to send data and/or event handlers down the component tree. i.e from parent to its child component.
+
+When this happens, the data that is received in the child component becomes read-only and cannot be changed by the child component. This is because the data is owned by the parent component and can only be changed by the same parent component.
+
+
+***THE STATE
+Unlike the props, the state data is local and specific to the component that owns it. It is not accessible to any other components unless the owner component chooses to pass it down as props to its child component(s).
+
+Even while the child component receives the data in its props, it wouldn’t know where exactly the data comes from. Maybe it was inputted or comes from the props.
+
+This way, the receiver component wouldn’t know how to update the data unless it references the parent owner.
+
+You’ll mostly find yourself declaring a state anytime you want some data to be updated whenever user perform some action like updating input field, toggling menu button etc. Also, if two or more child components need to communicate with each other.
+
+
+***ADDING STATE
+As we have it in the app diagram, the InputTodo component takes the responsibility of accepting the user’s input. Now, once the component receives this input data, we need to pass it to a central location where we can manage it and display in the browser view.
+
+This allows other components to have access to this data.
+
+For instance, the TodosList component will be accessing the data and display its todos items. Also, the TodoItem component (which holds the checkbox and delete button) will be accessing the data to update the checkbox, update edited items and also remove items from the state.
+
+Now, for every child component that will be accessing the data, you will need to declare the shared state in their closest common parent. For this reason, the shared state data will live in the TodoContainer component, which is their closest common parent. This parent component can then pass the state back to the children by using props. This is what we call “Lifting state up” and then having a “top-down” data flow.
+
+Though, instead of declaring a shared state in the parent component as mentioned above, an alternative is to use the Context API to manage the state data.
+
+Always remember, with props, we can access state data at different levels of the component hierarchy. This is called prop drilling. And it has to do with manually getting data from component A down to component B through the props. Where component A is the parent of B.
+
+As a recap,
+
+The todos data that come from the state of the TodoContainer component is passed as props using todos={this.state.todos}. Then, we accessed it through this.props.todos from within the TodosList component.
+
+
+
+***CONTROLLED COMPONENT
+To make the input field controllable, the input data (in this case, toggling of the checkbox) has to be handled by the component state and not the browser DOM. With this, the state will serve as a Single Source of Truth.
+
+Meaning, the input checkbox would no longer listens to its internal state (i.e the browser DOM) but the state in your app. This is necessary because the component state will not change unless you change it. You have succeeded in making the input checkbox a controlled input because it now listens only to the state in your application. Now if you try to toggle any of the checkboxes, nothing will happen. This is because each of the checked attributes is assigned a value equal to the current value of the state.
+
+Remember, only the first task is assigned to be completed. We need a way to change the state whenever users click on the checkboxes.
+
+
+***RAISING AND HANDLING EVENTS
+In our app, the parent component, TodoContainer is the one that holds the state data. This component, therefore, is the ONLY one that can change it. Meaning the TodoItem component, which is the one handling the checkboxes, cannot change the state data in the parent component, TodoContainer.
+
+We need to find a way to access the state data from the TodoItem and toggle the completed value to true or false in the TodoContainer component.
+
+To do this, we will need to raise an event from the TodoItem up a level to TodosList, and then into TodoContainer component. In other words, we need to climb a ladder.
+
+The TodoItem component will raise the event while the parent component, TodoContainer will handle the event. And the way we do that is through props.
+
+This is kind of tricky but trust me it's very simple. You can either go from the child to parent component or the other way round. I prefer the latter.
+
+So let’s do it. We will first enable communication between these components. Starting from the parent component, TodoContainer, add a handler method, handleChange just above the render() method.
+
+This time, make sure you have parenthesis, () attached to the handleChangeProps. Save all your files. Now, if you click any of the checkboxes, the onChange event will trigger and will call the handleChange() method in the parent component, TodoContainer.
+
+Let’s go a step further. We need to identify which one of the checkboxes is clicked. To do this, we need to pass along their respective ids through the callback function.
+
+
+***ADDING A TEXT INPUT FIELD AND A SUBMIT BUTTON
+In React, all the different types of input fields follow the same approach. We’ve seen how the checkbox type of input field works. Using the same pattern, we will add the text input field that accepts the user's input.
+
+Since we will be getting data through the user’s interaction (i.e through the input field), this component will, therefore, hold state.
+
+ As we did for the checkbox, we have to make the form input field a controlled field. The first step is to have a state manage the user's input.
+
+ Now, the text input field is being controlled by the component state and not the DOM. Hence, you will not be able to write anything in the field because it is assigned a value equal to the current value of the state.
+
+
+***WHAT'S HAPPENING?
+If you type anything inside the input field, the onChange event handler will trigger. This will then call the onChange() class method that will re-render the state using the setState() method.
+
+In the setState() method, we are passing the current value of the state (i.e the input text) to the title using e.target.value.
+
+And if you recall from vanilla JavaScript DOM API, the predefined parameter, e, hold some important information about the event. From there, you can target the specific input field and grab the updated value.
+
+
+*** HANDLING REACT FORM THAT HAS MORE THAN ONE TEXT INPUT FIELD
+For instance, if your form requires fields for the name, email and password. First, you would want all those fields included in the state and assigned to them an empty string. After that, you’d have to modify the onChange method to this:
+
+onChange = e => {
+  this.setState({
+    [e.target.name]: e.target.value
+  });
+};
+
+Then, you add a name attribute to each of the input tags and assign a value with the same name you declared in the state. For instance, in our case, we will have the name="title" included in the text input tag.
+
+With these changes, you can add as many text input fields as you want. Now, instead of having multiple methods to handle different input fields, we modified the setState() method to this:
+
+this.setState({
+  [e.target.name]: e.target.value,
+})
+
+As long as the value of the name attribute in the input tag matches what you have in the state. It will work perfectly.
