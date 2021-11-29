@@ -1,0 +1,18 @@
+- useReducer is a hook that is used for state management
+- useReducer is an alternative to useState
+- useState is built by using useReducer, so useReducer is a more primitive hook than useState.
+- useReducer is related to reducers
+- the regular reduce function takes two parameters: the reducer function and the initial value. The reducer function has two parameters: the accumultor and the current value.
+- useReducer takes two parameters: the current state & an action: useReducer(state, action)
+- useReducer returns a new state.
+- the action parameter is what dictates the state transition from the current state to the new statte.
+- useReducer returns a par of values: [newState, disptach].
+- the dispatch method is used to specify the action.
+
+- useReducer hook takes two parameters: a reducer function and the initial state: useReducer(reducer, initialState).
+- reducer function takes two parameters, which are the current state and the action: reducer(currentState, action)
+Depending on the current state and the action the reducer function returns a new state.
+- useReducer is basically changing the state in react components.
+- reducer function takes two values and returns one value. The two values accepted are the current state and the action. These are the parameters to the reducer fucntion.
+- the reducer function returns one value, which is the new state. But for this transition from the old state to the new state we need the action parameter. Action is an instruction to the reducer function based on what the action specifies, the reducer function performs the necessary state transition.
+- the convention to execute code based on the action is to use a switch statement.
