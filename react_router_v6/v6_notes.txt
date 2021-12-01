@@ -1,0 +1,80 @@
+CHANGES FROM REACT ROUTER 5 TO REACT ROUTER 6
+
+
+ROUTE DEFINITIONS
+- <Switch> has been replaced by <Routes> 
+- Instead of using 'component' or 'render' to return a jsx element/component when a route is matched, use 'element'
+
+	<Route path="/about" element={<About/>}/>
+
+- You no longer need to use the exact keyword. React Router will find the right route internally
+- The order of routes no longer matters
+
+
+LINKS
+- In NavLinks, the 'activeClassName' prop has been removed. If you want to apply a specific class once the NavLink is active you have to manually find out whether the NavLink is active or not. To do that you can use the className prop or the style prop to appply dynamic styling. Both props work in a special way ewhen applied to NavLink. Both can take a function and the function will give you info about the NavLink and the current state of navigation. It can be thought of as navdata. This navdata is provided to the function by react router when the function is executed. The function will be executed by react router when it evaluates NavLink and whenever your navigation changes. Inside the navdata object you automatically get an 'isActive' property. The isActive property will be true if this NavLink is active for the currently chosen path and false if not. You can use this to return a className dynamically that can then be applied to NavLink. You can deconstruct from navdata isActive while passing as an argument.
+
+	<NavLink to={'/invoices'} className={{isActive} => isActive ? classes.active : ''}/>
+
+
+REDIRECT
+- the <Redirect/> component does not exist in v6. In stead you can use the <Navigate/> component. 
+- If you just add the <Navigate/> component to the route, it'll just push a navigation path onto the navigation stack. If you truly want to redirect, i.e. replace the current page with the new page, then you have to add the 'replace' prop to the Navigate component as well. Then it would be the full replacement the old Redirect component. But you only want to push the new page, you leave out the 'replace' prop. 
+
+	<Route path={'/form' element={<Navigate to="/successpage"}}/>
+
+
+HOW TO RESTRICT ACCESS TO ROUTES TO AUTHENTICATED USERS 
+- The use of the useNavigate() hook and the <Navigate> component for navigating both imperatively after the login form is   submitted and declaratively when a non-authenticated user visits a particular route
+- The use of location.state to preserve the previous location so you can send the user there after they authenticate
+- The use of navigate("...", { replace: true }) to replace the /login route in the history stack so the user doesn't return to     the login page when clicking the back button after logging in
+
+
+
+NESTED ROUTES
+- Nested routes can be useful because they allow you to buid deeply nested page structures.
+- Nested routes must be wrapped inside a <Routes> component, even if it's just one route. 
+- If you plan on using nested routes you have to start with the parent route that will hold the nested routes. 
+- There's a special '*' syntax that can be used in the parent route:
+
+	<Route path={'/welcome/*'} element{<Welcome/>}/>
+
+- The * syntaxt can be used as an error path if no other routes match. But it can also be used to have a path be matched up to     the point in which the * is at in the path. It tells react router to match the start of the path instead of the full path. So    now the Welcome component will be loaded whenever the path starts with '/welcome' instead of having an exact full match. So *    is basically a wild card for whatever comes after '/welcome'. The last part of the path will be in the url, which will be  one   of the nested routes that will match, which will then render the correct component.   
+- The paths of nested routes are relative to the parent route. So:
+
+	<Route path="/welcome/*" element={<Welcome/> /}
+
+  will only return the welcome component if it starts as "/welcome". The nested routes with paths already assumes that   "/welcome" is at the beginning of the path, so you only need to add the last part of the path. 
+
+- Links that are nested are relative to the parent route as well. 
+- Another way to implement nested routes is to simply place them in App.js as a child to the route they're supposed to be nested   within:
+
+	<Routes>
+     	   <Route path="/welcome/*" element={<Welcome /> >
+              <Route path="new-user" element={<NewUser />}
+           </ Route>
+        </Routes>
+
+  The advantage of defining it like this is that you have all of your routes in the same place. It's easier to see all the   supported routes and definitions if they're in the same place instead of spreading them across the application. 
+- If you use this pattern of placing the nested routes all in one place, you have to tell react router where the nested content   should be inserted into the DOM. Now that the nested route definition is in App.js it's not clear where in the Welcome        component the nested component should be inserted. 
+- To let react router know where the nested content should be inserted you can use the <Outlet /> component. Outlet is a   placeholder telling React router where nested route content should be inserted. 
+
+
+HISTORY AND IMPERATIVE NAVIGATION
+- useHistory is no longer available in v6. It's been replaced with useNavigation() hook
+- When you ant to navigate after a certain action finishes i.e. button was clicked, form submitted, http request sent, etc. 
+  With v5 you could use useHistory hook to create a hostory object. Then on the histroy object you can push a new route or   replace a route to redirect. 
+- With v6 we have a useNavigate() hook. It gives us a navigate function and object:
+
+	const navigate = useNavigate();
+
+  The navigate function can be used to navigate somewhere else. You would usually use it in a useEffecthook, http request etc.   That's how you would navigate programatically. 
+- If you want to redirect you can place a second argument which is an objecvt with some options and there yu could set replace   to true whichwill replace the current route with the new one, which will redirect instead of pushing the new route on t the     navigation stack:
+
+	navigate('/successpage', {replace: true})
+
+- You can also pass in a negative number to be sent to back to previous pages or a positive number to go forward
+
+	navigate(-1) // goes back one page
+	navigate(1) // goes forward on page
+
