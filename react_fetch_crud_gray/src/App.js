@@ -37,11 +37,15 @@ function App() {
   }, []);
 
   const addItem = async (item) => {
+    // create new item with item passed in
     const id = items.length ? items[items.length - 1].id + 1 : 1;
     const myNewItem = { id, checked: false, item };
     const listItems = [...items, myNewItem];
+
+    // update dom
     setItems(listItems);
 
+    // update json server with items data
     const postOptions = {
       method: 'POST',
       headers: {
@@ -54,11 +58,15 @@ function App() {
   };
 
   const handleCheck = async (id) => {
+    // find item with origin of the click event and toggle checked value
     const listItems = items.map((item) =>
       item.id === id ? { ...item, checked: !item.checked } : item
     );
+
+    // update dom
     setItems(listItems);
 
+    // update json server with items data
     const myItem = listItems.filter((item) => item.id === id);
     const updateOptions = {
       method: 'PATCH',
@@ -73,9 +81,13 @@ function App() {
   };
 
   const handleDelete = async (id) => {
+    // filter out the item clicked on to be deleted
     const listItems = items.filter((item) => item.id !== id);
+
+    // update dom
     setItems(listItems);
 
+    // update json server with items data
     const deleteOptions = { method: 'DELETE' };
     const reqUrl = `${API_URL}/${id}`;
     const result = await apiRequest(reqUrl, deleteOptions);
