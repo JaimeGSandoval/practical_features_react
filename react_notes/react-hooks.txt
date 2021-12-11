@@ -48,10 +48,6 @@ const onChange = e => {
   })
 }
 
-With this approach, you can manage as many input fields in your app with a single function (In this case, the onChange). All you have to do is to make sure that the name prop in these fields matches what you specified in the state.
-
-But if you don’t feel comfortable grouping related data like this, you can split them into different useState. But don’t forget, you'd need separate functions to manage them.
-
 
 **********useEffect
 What is happening in the code?
